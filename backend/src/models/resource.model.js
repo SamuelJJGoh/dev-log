@@ -7,26 +7,22 @@ const resourceSchema = new Schema (
             required: true,
             trim: true
         },
-        url: {
-            type: String,
-            trim: true
-        },
-        category: {
+        category: {         // "Video", "Article", "Documentation"
             type: String,
             required: true,
             trim: true
         },
-        topic: {
+        topic: {            // "React", "DSA"
             type: String,
             required: true,
             trim: true
         },
-        status: {
+        status: {           // "To watch", "In progress", "Completed"
             type: String,
             required: true,
             trim: true,
         },
-        notes: {
+        notes: {            // "url link to resource", "why the resource is useful"
             type: String,
             required: true,
             trim: true,

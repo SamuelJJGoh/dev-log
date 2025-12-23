@@ -15,19 +15,19 @@ const sessionSchema = new Schema(
             type: Number,
             required: true,
         },
-        type: {
+        type: {             // "Project", "Tutorial", Interview Prep, DSA
             type: String,
             required: true,
             trim: true
         },
-        techStack: {
+        techStack: {        // ["React", "Node.js", "MongoDB"]
             type: [{type: String, trim: true, required: true}],
             validate: {
                 validator: v => Array.isArray && v.length > 0,
                 message: "techStack must have at least one item"
             }
         }, 
-        notes: {
+        notes: {            // Lessons learned, Challenges, Outcomes
             type: String,
             required: true,
             trim: true,
