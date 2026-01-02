@@ -18,10 +18,15 @@ const resourceSchema = new Schema (
             required: true,
             trim: true
         },
-        status: {           // "To watch", "In progress", "Completed"
+        status: {          
             type: String,
             required: true,
-            trim: true,
+            enum: [
+                "To watch",
+                "In progress",
+                "Completed"
+            ],
+            default: "To watch"
         },
         notes: {            // "url link to resource", "why the resource is useful"
             type: String,

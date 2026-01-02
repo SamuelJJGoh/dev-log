@@ -15,20 +15,29 @@ const sessionSchema = new Schema(
         durationMinutes: {
             type: Number,
             required: true,
+            min: 1,
         },
-        type: {             // "Project", "Tutorial", Interview Prep, DSA
+        type: {            
             type: String,
             required: true,
-            trim: true
+            enum: [
+                "Project",
+                "Work",
+                "Tutorial", 
+                "Interview Prep",
+                "DSA", 
+                "Research", 
+                "System Design"
+            ]
         },
         techStack: {        // ["React", "Node.js", "MongoDB"]
             type: [{type: String, trim: true, required: true}],
             validate: {
-                validator: v => Array.isArray && v.length > 0,
+                validator: v => Array.isArray(v) && v.length > 0,
                 message: "techStack must have at least one item"
             }
         }, 
-        notes: {            // Lessons learned, Challenges, Outcomes
+        notes: {            // "Lessons learned", "Challenges", "Outcomes"
             type: String,
             required: true,
             trim: true,
