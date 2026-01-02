@@ -4,7 +4,7 @@ export default function Dashboard() {
 
     return (
        <Layout>
-            Dashboard Page
+            <h3>Dashboard Page </h3>
        </Layout>
     );
 }
