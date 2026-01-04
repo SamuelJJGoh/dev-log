@@ -19,6 +19,9 @@
         --muted-foreground: 215 20% 55%;
 
         --border: 222 30% 18%;
+
+        --glow-primary: 0 0 30px hsl(174 72% 56% / 0.3);
+
     }
 
     * {
@@ -44,5 +47,10 @@
   .nav-link-active {
     @apply text-primary bg-primary/10 border border-primary/20;
   }
+
+  .glow-primary {
+    box-shadow: var(--glow-primary);
+  }
+
 
 }
