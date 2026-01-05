@@ -18,10 +18,28 @@
         --muted: 222 30% 18%;
         --muted-foreground: 215 20% 55%;
 
+        --destructive: 0 72% 51%;
+        --destructive-foreground: 210 40% 98%;
+
+        --card: 222 47% 8%;
+        --card-foreground: 210 40% 98%;
+
         --border: 222 30% 18%;
+
+        /* Gradient tokens */
+        --gradient-card: linear-gradient(180deg, hsl(222 47% 10%) 0%, hsl(222 47% 8%) 100%);
+        --gradient-surface: linear-gradient(135deg, hsl(222 47% 12% / 0.8) 0%, hsl(222 47% 8% / 0.8) 100%);
 
         --glow-primary: 0 0 30px hsl(174 72% 56% / 0.3);
 
+        /* Session type colors */
+        --type-project: 230 70% 60%;
+        --type-tutorial: 262 83% 65%; 
+        --type-interview: 0 72% 51%; 
+        --type-dsa: 38 92% 50%;
+        --type-work: 55 75% 49.5%;
+        --type-research: 280 75% 62%;        
+        --type-system-design: 320 70% 60%;
     }
 
     * {
@@ -40,10 +58,9 @@
 }
 
 @layer components {
-    .nav-link {
+  .nav-link {
     @apply px-4 py-2 rounded-lg text-muted-foreground transition-all duration-200 hover:text-foreground hover:bg-secondary;
   }
-
   .nav-link-active {
     @apply text-primary bg-primary/10 border border-primary/20;
   }
@@ -52,5 +69,41 @@
     box-shadow: var(--glow-primary);
   }
 
+  .glass-card {
+    @apply bg-card/60 backdrop-blur-xl border border-border/50 rounded-xl;
+    background: var(--gradient-surface);
+  }
+  .session-card {
+    @apply glass-card p-5 transition-all duration-300 hover:border-primary/40;
+  }
 
+  .status-badge {
+    @apply px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide;
+  }
+
+  .tech-chip {
+    @apply px-2.5 py-1 rounded-md text-xs font-medium border;
+  }
+
+  .icon-button {
+    @apply p-2 rounded-lg text-muted-foreground;
+  }
+
+}
+
+@layer utilities {
+  .animate-fade-up {
+    animation: fadeUp 0.5s ease-out forwards;
+  }
+
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 }

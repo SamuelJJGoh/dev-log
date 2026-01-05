@@ -28,6 +28,23 @@ export default {
           DEFAULT: "hsl(var(--muted))",
           foreground: "hsl(var(--muted-foreground))",
         },
+        destructive: {
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
+        },
+        card: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
+        },
+        type: {
+          project: "hsl(var(--type-project))",
+          tutorial: "hsl(var(--type-tutorial))",
+          interview: "hsl(var(--type-interview))",
+          dsa: "hsl(var(--type-dsa))",
+          work: "hsl(var(--type-work))",
+          research: "hsl(var(--type-research))",
+          systemDesign: "hsl(var(--type-system-design))",
+        }
       }
     },
   },
