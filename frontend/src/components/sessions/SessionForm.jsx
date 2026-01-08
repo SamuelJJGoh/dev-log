@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChevronDown } from 'lucide-react';
 
 const sessionTypes = [
@@ -11,7 +11,18 @@ const sessionTypes = [
     "System Design",
 ];
 
-export const SessionForm = ({ onClose, onCreate }) => {
+const getDateValue = (value) => {
+    if (!value) return "";
+
+    const date = new Date(value); // value returned from API might be in string format so we normalize it into Date object 
+
+    if (Number.isNaN(date.getTime())) {
+        return "";
+    }
+    return date.toISOString().slice(0, 10); // date is now in YYYY-MM-DD format which the date input accepts
+};
+
+export const SessionForm = ({ onClose, onCreate, initialValues, onUpdate }) => {
     const [formValues, setFormValues] = useState({
         title: "",
         date: "",
@@ -21,6 +32,7 @@ export const SessionForm = ({ onClose, onCreate }) => {
         notes: "",
     });
     const [isSubmitting, setIsSubmitting] = useState(false);    
+    const isEditing = Boolean(initialValues);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -46,7 +58,12 @@ export const SessionForm = ({ onClose, onCreate }) => {
             setIsSubmitting(true);
         
             let result;
-            if (onCreate) { 
+            if (isEditing && onUpdate) {
+                result = await onUpdate({
+                    ...payload,
+                    _id: initialValues._id
+                });
+            } else if (onCreate) { 
                 result = await onCreate(payload);   
             } else {
                 result = null;
@@ -64,12 +81,37 @@ export const SessionForm = ({ onClose, onCreate }) => {
                 onClose();
             }
         } catch (error) {
+            if (isEditing) {
+                console.error("Error updating session:", error);
+            } else {
             console.error("Error creating session:", error);
-            
+            }           
         } finally {
             setIsSubmitting(false);
         }
     };
+
+    useEffect(() => {
+        if (initialValues) {
+            setFormValues({
+                title: initialValues.title || "",
+                date: getDateValue(initialValues.date),
+                durationMinutes: initialValues.durationMinutes || "",
+                type: initialValues.type || "Project",
+                techStack: initialValues.techStack.join(", ") || "",
+                notes: initialValues.notes || "",
+            });
+        } else { // Reset form if no initial values
+            setFormValues({
+                title: "",
+                date: "",
+                durationMinutes: "",
+                type: "Project",
+                techStack: "",
+                notes: "",
+            });
+        }
+    }, [initialValues]);
 
     return (
         // Full screen container
@@ -196,7 +238,7 @@ export const SessionForm = ({ onClose, onCreate }) => {
                             disabled={isSubmitting}
                             className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
                         >
-                            Create Session
+                            {initialValues ? "Save Session" : "Create Session"}
                         </button>
                     </div>
                 </form>

@@ -12,6 +12,7 @@ export default function Sessions() {
     const [loading, setLoading] = useState(false);
 
     const [showForm, setShowForm] = useState(false);
+    const [editingSession, setEditingSession] = useState(null);
     
     const fetchSessions = useCallback(async () => {     
         setLoading(true);   
@@ -79,6 +80,49 @@ export default function Sessions() {
         }
     }
 
+    // open form for editing
+    const handleEditSession = (session) => {
+        setEditingSession(session);
+        setShowForm(true);
+    };
+
+    // call the update API and update state
+    const handleUpdateSession = async (updatedSession) => {
+        try {
+            if (!updatedSession || !updatedSession._id) {
+                console.error("Invalid session data for update.");
+                return;
+            }
+            const response = await axios.patch(
+                `${API_BASE_URL}/v1/sessions/${updatedSession._id}`,
+                updatedSession,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+
+            const savedSession = response.data.session;
+
+            setSessions((prevSessions) => 
+                prevSessions.map((session) => 
+                    session._id === savedSession._id ? savedSession : session
+                )
+            );
+
+            return savedSession;
+
+        } catch (error) {
+            let message = "Error updating session.";
+            if (error.response && error.response.data && error.response.data.error) {
+                message += ` ${error.response.data.error}`;
+            }
+            console.error(message);
+            return null;
+        }
+    };
+
     return (
         <Layout>
             <div className="mx-auto max-w-7xl px-6 py-8">
@@ -99,12 +143,25 @@ export default function Sessions() {
                 <p className="text-muted-foreground text-sm">{`Showing ${sessions.length} of ${sessions.length} sessions`}</p>
 
                 <div>
-                    <SessionList sessions={sessions} loading={loading} onDelete={handleDeleteSession}/>
+                    <SessionList
+                        sessions={sessions}
+                        loading={loading}
+                        onDelete={handleDeleteSession}
+                        onEdit={handleEditSession}
+                    />
                 </div>
             </div>
 
             {showForm && (
-                <SessionForm onClose={() => setShowForm(false)} onCreate={handleCreateSession} />
+                <SessionForm
+                    onClose={() => {
+                        setShowForm(false);
+                        setEditingSession(null);
+                    }}
+                    onCreate={handleCreateSession}
+                    initialValues={editingSession}
+                    onUpdate={handleUpdateSession}
+                />
             )}
         </Layout>
     );

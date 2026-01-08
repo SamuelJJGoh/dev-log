@@ -41,7 +41,7 @@ const typeStyles = {
     "System Design": "bg-type-systemDesign/10 text-type-systemDesign border-type-systemDesign/30",
 };
 
-export const SessionList = ({ sessions = [], loading = false, onDelete }) => {
+export const SessionList = ({ sessions = [], loading = false, onDelete, onEdit }) => {
     return (
         <div className="mt-4">
             {loading ? (
@@ -103,6 +103,7 @@ export const SessionList = ({ sessions = [], loading = false, onDelete }) => {
                                     <div className="text-muted-foreground flex items-center gap-4" >
                                         <button 
                                             className="icon-button hover:text-primary hover:bg-primary/10 transition-colors duration-200"
+                                            onClick={() => onEdit && onEdit(session)}
                                         >
                                             <SquarePen className="h-5 w-5" />
                                         </button>
@@ -123,7 +124,7 @@ export const SessionList = ({ sessions = [], loading = false, onDelete }) => {
                 <div className="glass-card p-12 text-center">
                     <h3 className="font-mono text-lg font-semibold">No sessions found</h3>
                     <p className="mt-2 text-muted-foreground">
-                    Try adding a new coding session to get started!
+                        Try adding a new coding session to get started!
                     </p>
                 </div>
             )}
