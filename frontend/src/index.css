@@ -25,6 +25,8 @@
         --card-foreground: 210 40% 98%;
 
         --border: 222 30% 18%;
+        --input: 222 30% 14%;
+        --ring: 174 72% 56%;
 
         /* Gradient tokens */
         --gradient-card: linear-gradient(180deg, hsl(222 47% 10%) 0%, hsl(222 47% 8%) 100%);
@@ -54,6 +56,12 @@
 
     h1, h2, h3, h4, h5, h6 {
         font-family: 'JetBrains Mono', monospace;
+    }
+
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        filter: invert(71%) sepia(38%) saturate(460%) hue-rotate(118deg) brightness(96%) contrast(92%);
+        opacity: 0.9;
+        cursor: pointer;
     }
 }
 
@@ -94,6 +102,23 @@
 @layer utilities {
   .animate-fade-up {
     animation: fadeUp 0.5s ease-out forwards;
+  }
+
+  .remove-arrow {
+    appearance: textfield;
+    -moz-appearance: textfield;
+  }
+
+  .remove-arrow::-webkit-outer-spin-button,
+  .remove-arrow::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .styled-select select {
+    -moz-appearance:none;
+    -webkit-appearance:none;
+    appearance:none;
   }
 
   @keyframes fadeUp {
