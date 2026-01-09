@@ -11,7 +11,14 @@ const resourceSchema = new Schema (
         category: {         // "Video", "Article", "Documentation"
             type: String,
             required: true,
-            trim: true
+            enum: [
+                "Video",
+                "Article",
+                "Documentation",
+                "Repo / Code Sample",
+                "Course",
+                "Cheat Sheet"
+            ]
         },
         topic: {            // "React", "DSA"
             type: String,

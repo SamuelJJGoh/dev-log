@@ -6,7 +6,7 @@ const createResource = async (req, res) => {
 
         if (!title || !category || !topic ||!status || !notes) {
             return res.status(400).json({
-                message: "One of the required fields is missing!"
+                message: "All fields are required!"
             })
         }
 
