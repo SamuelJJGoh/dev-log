@@ -18,6 +18,9 @@
         --muted: 222 30% 18%;
         --muted-foreground: 215 20% 55%;
 
+        --accent: 262 83% 65%;
+        --accent-foreground: 210 40% 98%;
+
         --destructive: 0 72% 51%;
         --destructive-foreground: 210 40% 98%;
 
@@ -33,6 +36,7 @@
         --gradient-surface: linear-gradient(135deg, hsl(222 47% 12% / 0.8) 0%, hsl(222 47% 8% / 0.8) 100%);
 
         --glow-primary: 0 0 30px hsl(174 72% 56% / 0.3);
+        --glow-accent: 0 0 30px hsl(262 83% 65% / 0.3);
 
         /* Session type colors */
         --type-project: 230 70% 60%;
@@ -75,6 +79,10 @@
 
   .glow-primary {
     box-shadow: var(--glow-primary);
+  }
+
+  .glow-accent {
+    box-shadow: var(--glow-accent);
   }
 
   .glass-card {

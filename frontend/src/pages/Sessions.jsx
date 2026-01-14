@@ -170,7 +170,7 @@ export default function Sessions() {
                         onClick={() => setShowForm(true)}
                         className="flex items-center justify-center rounded-xl border gap-2 px-5 py-3 bg-primary text-primary-foreground font-medium transition-all duration-200 hover:bg-primary/90 glow-primary"
                     >
-                        <Plus className=""/>
+                        <Plus />
                         <span>New Session</span>
                     </button>
                 </div>
