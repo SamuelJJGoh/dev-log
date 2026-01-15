@@ -32,6 +32,7 @@ export default function Resources() {
     const [selectedCategory, setSelectedCategory] = useState("All");
     const [selectedStatus, setSelectedStatus] = useState("All");
 
+    const [checked, setChecked] = useState(false);
 
     const fetchResources = useCallback(async () => {
         setLoading(true);
@@ -52,15 +53,22 @@ export default function Resources() {
 
     const filteredResources = resources.filter((resource) => {
         const query = searchQuery.toLowerCase();
-        if (query && !resource.title.toLowerCase().includes(query)) {
-            const topicMatch = Array.isArray(resource.topics)
-                ? resource.topics.some((topic) => topic.toLowerCase().includes(query)) //.some() returns true if at least one topic matches the query
-                : false
-            if (!topicMatch) {
-                return false
-            }
-        }
 
+        if (checked) {
+            if (query && !resource.title.toLowerCase().includes(query)) {
+                const topicMatch = Array.isArray(resource.topics)
+                    ? resource.topics.some((topic) => topic.toLowerCase().includes(query)) //.some() returns true if at least one topic matches the query
+                    : false
+                    if (!topicMatch) {
+                        return false
+                    }
+            } 
+        } else {
+            if (query && !resource.title.toLowerCase().includes(query)) {
+                return false
+            } 
+        }
+        
         if (selectedStatus !== "All" && resource.status !== selectedStatus) {
             return false;
         }
@@ -89,17 +97,28 @@ export default function Resources() {
 
                 <div className="glass-card p-4 mb-6">
                     <div className="flex flex-col lg:flex-row gap-4">
+
                         {/* Search Bar */}
-                        <div className="relative flex-1">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                            <input 
-                                type="text"
-                                className="rounded-lg border border-border/70 bg-secondary/60 text-sm w-full pl-10 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent/50"
-                                placeholder="Search resources..."
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                            />
-                        </div>
+                            <div className="relative flex-1">
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                <input 
+                                    type="text"
+                                    className="rounded-lg border border-border/70 bg-secondary/60 text-sm w-full pl-10 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent/50"
+                                    placeholder="Search resources..."
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                />
+                            </div>
+                           
+
+                            <label className="flex gap-2 items-center text-muted-foreground text-sm">
+                                    <input 
+                                        type="checkbox"
+                                        onChange={(e) => setChecked(e.target.checked)}
+                                    />  
+                                    Search by topics
+                            </label>
+
 
                         {/* Resource statuses dropdown */}
                         <div className="flex items-center relative styled-select group">
