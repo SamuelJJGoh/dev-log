@@ -240,7 +240,7 @@ export default function Sessions() {
                 {filteredSessions.length === 0 && sessions.length !== 0 && (
                     <div className="glass-card p-12 text-center">
                         <div className="mx-auto h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                        <Search className="h-8 w-8 text-primary" />
+                            <Search className="h-8 w-8 text-primary" />
                         </div>
                         <h3 className="font-mono text-lg font-semibold">No sessions found</h3>
                         <p className="mt-2 text-muted-foreground">

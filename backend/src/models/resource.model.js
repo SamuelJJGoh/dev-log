@@ -20,10 +20,12 @@ const resourceSchema = new Schema (
                 "Cheat Sheet"
             ]
         },
-        topic: {            // "React", "DSA"
-            type: String,
-            required: true,
-            trim: true
+        topics: {            // ["React", "DSA"], ["MongoDB"]
+            type: [{type: String, trim: true, required: true}],
+            validate: {
+                validator: v => Array.isArray(v) && v.length > 0,
+                message: "topics must have at least one item"
+            }
         },
         status: {          
             type: String,
@@ -35,13 +37,17 @@ const resourceSchema = new Schema (
             ],
             default: "To watch"
         },
-        notes: {            // "url link to resource", "why the resource is useful"
+        url: {
+            type: String,
+            trim: true,
+        },
+        notes: {            // "description of the resource, "why the resource is useful"
             type: String,
             required: true,
             trim: true,
             minlength: 1,
             maxlength: 1000
-        }
+        },
     },
 
     {

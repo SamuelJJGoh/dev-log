@@ -2,19 +2,26 @@ import { Resource } from "../models/resource.model.js";
 
 const createResource = async (req, res) => {
     try {
-        const { title, category, topic, status, notes } = req.body
+        const { title, category, topics, status, url, notes } = req.body
 
-        if (!title || !category || !topic ||!status || !notes) {
+        if (!title || !category || !topics ||!status || !notes) {
             return res.status(400).json({
                 message: "All fields are required!"
+            })
+        }
+
+        if (!Array.isArray(topics) || topics.length === 0) {
+            return res.status(400).json({
+                message: "topics must have at least one item"
             })
         }
 
         const resource = await Resource.create({
             title,
             category, 
-            topic,
+            topics,
             status,
+            url,
             notes
         })
 

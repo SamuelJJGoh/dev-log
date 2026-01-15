@@ -19,9 +19,10 @@ export const ResourceForm = ({ onClose }) => {
     const [formValues, setFormValues] = useState({
         title: '',
         category: "Video",
-        topic: '',
+        topics: '',
         status: "To watch",
-        notes: ''
+        notes: '',
+        url: ''
     });
 
     const [isSubmitting, setIsSubmitting] = useState(false);    
@@ -94,12 +95,12 @@ export const ResourceForm = ({ onClose }) => {
 
                     <div className="grid gap-4 md:grid-cols-2">
                         <label className="flex flex-col gap-2 text-sm font-medium">
-                            Topic
+                            Topics
                             <input 
                                 className="rounded-lg border border-border/70 bg-input/60 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent/50"
                                 type="text"
-                                name="topic"
-                                value={formValues.topic}
+                                name="topics"
+                                value={formValues.topics}
                                 onChange={handleChange}
                                 placeholder="MongoDB"
                                 required
@@ -126,6 +127,20 @@ export const ResourceForm = ({ onClose }) => {
                             </div>
                         </label>
                     </div>
+                    
+                    <div>
+                        <label className='flex flex-col gap-2 text-sm font-medium'>
+                            URL
+                            <input 
+                                className="rounded-lg border border-border/70 bg-input/60 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent/50"
+                                type="url"
+                                name="url"
+                                value={formValues.url}
+                                onChange={handleChange}
+                                placeholder="https://www.youtube.com"
+                            />
+                        </label>
+                    </div>
 
                     <div>
                         <label className="flex flex-col gap-2 text-sm font-medium">
@@ -136,7 +151,7 @@ export const ResourceForm = ({ onClose }) => {
                                 name="notes"
                                 value={formValues.notes}
                                 onChange={handleChange}
-                                placeholder="Add notes about the resource, such as the URL and why it's useful."
+                                placeholder="Add notes about the resource, such as a short description and why it's useful."
                                 required
                             />
                         </label>

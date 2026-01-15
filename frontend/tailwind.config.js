@@ -50,6 +50,11 @@ export default {
           work: "hsl(var(--type-work))",
           research: "hsl(var(--type-research))",
           systemDesign: "hsl(var(--type-system-design))",
+        },
+        status: {
+          toWatch: "hsl(var(--status-to-watch))",
+          inProgress: "hsl(var(--status-in-progress))",
+          completed: "hsl(var(--status-completed))",
         }
       }
     },

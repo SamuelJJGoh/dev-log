@@ -38,7 +38,7 @@
         --glow-primary: 0 0 30px hsl(174 72% 56% / 0.3);
         --glow-accent: 0 0 30px hsl(262 83% 65% / 0.3);
 
-        /* Session type colors */
+        /* Session type colours */
         --type-project: 230 70% 60%;
         --type-tutorial: 262 83% 65%; 
         --type-interview: 0 72% 51%; 
@@ -46,6 +46,12 @@
         --type-work: 55 75% 49.5%;
         --type-research: 280 75% 62%;        
         --type-system-design: 320 70% 60%;
+
+        /* Resource status colours */
+        --status-to-watch: 0 72% 51%;
+        --status-in-progress: 217 91% 60%;
+        --status-completed: 142 76% 46%;
+
     }
 
     * {
@@ -91,6 +97,9 @@
   }
   .session-card {
     @apply glass-card p-5 transition-all duration-300 hover:border-primary/40;
+  }
+  .resource-card {
+    @apply glass-card p-4 transition-all duration-300 hover:border-accent/40;
   }
 
   .status-badge {
