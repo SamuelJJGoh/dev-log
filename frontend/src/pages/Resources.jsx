@@ -27,6 +27,8 @@ export default function Resources() {
     const [loading, setLoading] = useState(false);
 
     const [showForm, setShowForm] = useState(false);
+    const [editingResource, setEditingResource] = useState(null);
+
 
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedCategory, setSelectedCategory] = useState("All");
@@ -99,6 +101,46 @@ export default function Resources() {
             );
         } catch (error) {
             console.error("Error deleting resource:"), error
+        }
+    }
+
+    const handleEditResource = (resource) => {
+        setEditingResource(resource);
+        setShowForm(true);
+    }
+
+    const handleUpdateResource = async (updatedResource) => {
+        try {
+            if (!updatedResource || !updatedResource._id) {
+                console.error("Invalid session data for update.")
+                return;
+            }
+
+            const response = await axios.patch(
+                `${API_BASE_URL}/v1/resources/${updatedResource._id}`,
+                updatedResource,
+                {
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                }
+            );
+
+            const savedResource = response.data.resource;
+
+            setResources((prevResource) => 
+                prevResource.map((resource) => 
+                    resource._id === savedResource._id ? savedResource : resource)
+            )
+
+            return savedResource;
+        } catch (error) {
+              let message = "Error updating resource.";
+            if (error.response && error.response.data && error.response.data.error) {
+                message += ` ${error.response.data.error}`;
+            }
+            console.error(message);
+            return null;
         }
     }
 
@@ -218,6 +260,7 @@ export default function Resources() {
                         resources={resources} 
                         loading={loading}
                         onDelete={handleDeleteResource}
+                        onEdit={handleEditResource}
                         filteredResources={filteredResources}/>
                 </div>
 
@@ -236,8 +279,13 @@ export default function Resources() {
 
             {showForm && (
                 <ResourceForm 
-                    onClose={() => setShowForm(false)} 
+                    onClose={() => {
+                        setShowForm(false);
+                        setEditingResource(null);
+                    }} 
                     onCreate={handleCreateResource}
+                    initialValues={editingResource}
+                    onUpdate={handleUpdateResource}
                 />
             )}
         </Layout>

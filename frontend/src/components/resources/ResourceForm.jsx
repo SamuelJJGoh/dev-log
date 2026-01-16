@@ -1,5 +1,6 @@
 import { ChevronDown } from 'lucide-react';
-import { useState } from 'react';   
+import { useState, useEffect } from 'react';   
+
 const categoryTypes = [
     "Video",
     "Article",
@@ -15,7 +16,7 @@ const statusTypes = [
     "Completed"
 ];
 
-export const ResourceForm = ({ onClose, onCreate }) => {
+export const ResourceForm = ({ onClose, onCreate, initialValues, onUpdate }) => {
     const [formValues, setFormValues] = useState({
         title: '',
         category: "Video",
@@ -26,6 +27,7 @@ export const ResourceForm = ({ onClose, onCreate }) => {
     });
 
     const [isSubmitting, setIsSubmitting] = useState(false);    
+    const isEditing = Boolean(initialValues);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -50,7 +52,13 @@ export const ResourceForm = ({ onClose, onCreate }) => {
             setIsSubmitting(true);  
 
             let result;
-            if (onCreate) {
+            if (isEditing && onUpdate) {
+                result = await onUpdate({
+                    ...payload,
+                    _id: initialValues._id
+                });
+            }
+            else if (onCreate) {
                 result = await onCreate(payload);
             } else {
                 result = null;
@@ -68,11 +76,37 @@ export const ResourceForm = ({ onClose, onCreate }) => {
                 onClose();
             }
         } catch (error) {
-            console.error("Error creating session:", error);
+            if (isEditing) {
+                console.error("Error editing session:", error);
+            } else {
+                console.error("Error creating session:", error);
+            }
         } finally {
             setIsSubmitting(false);
         }
     }
+
+       useEffect(() => {
+            if (initialValues) {
+                setFormValues({
+                    title: initialValues.title || "",
+                    category: initialValues.category || "Video",
+                    topics: initialValues.topics.join(", ") || "",
+                    status: initialValues.status || "To watch",
+                    url: initialValues.url || "",
+                    notes: initialValues.notes || "",
+                });
+            } else { // Reset form if no initial values
+                setFormValues({
+                    title: "",
+                    category: "",
+                    topics: "",
+                    status: "Project",
+                    url: "",
+                    notes: "",
+                });
+            }
+        }, [initialValues]);
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center px-4 py-8">
@@ -194,15 +228,16 @@ export const ResourceForm = ({ onClose, onCreate }) => {
                             <button 
                                 type="button"
                                 className="rounded-lg border border-border/70 px-4 py-2 text-sm font-medium text-muted-foreground transition hover:text-foreground"
-                                onClick={onClose}>
+                                onClick={onClose}
+                            >
                                 Cancel
                             </button>
                             <button
                                 type="submit"
                                 className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground transition hover:bg-accent/90"
                                 disabled={isSubmitting}
-                                >
-                                Create Resource
+                            >
+                                {isEditing ? "Save Resource" : "Create Resource"}
                             </button>
                         </div>
                     </div>

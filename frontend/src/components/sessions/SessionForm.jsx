@@ -84,7 +84,7 @@ export const SessionForm = ({ onClose, onCreate, initialValues, onUpdate }) => {
             if (isEditing) {
                 console.error("Error updating session:", error);
             } else {
-            console.error("Error creating session:", error);
+                console.error("Error creating session:", error);
             }           
         } finally {
             setIsSubmitting(false);
@@ -237,7 +237,7 @@ export const SessionForm = ({ onClose, onCreate, initialValues, onUpdate }) => {
                             disabled={isSubmitting}
                             className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
                         >
-                            {initialValues ? "Save Session" : "Create Session"}
+                            {isEditing ? "Save Session" : "Create Session"}
                         </button>
                     </div>
                 </form>
