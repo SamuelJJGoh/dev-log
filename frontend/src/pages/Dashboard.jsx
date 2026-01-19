@@ -1,7 +1,9 @@
 import { Layout } from "../components/layout/layout.jsx";
 import { StatsCard } from "../components/dashboard/StatsCard.jsx";
-import { Code2, Clock, BookOpen, Flame } from "lucide-react";
+import { RecentSessions } from "../components/dashboard/RecentSessions.jsx";
+import { Code2, Clock, BookOpen, Flame, ArrowRight } from "lucide-react";
 import { useState, useEffect, useMemo, useCallback } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 
 
@@ -178,6 +180,40 @@ export default function Dashboard() {
                     />
                 </div>
 
+                {/* Main Content */}
+                <div className="grid lg:grid-cols-3 gap-6">
+
+                    {/* Recent Sessions */}
+                    <div className="lg:col-span-2 space-y-6">
+                        <div>
+                            <div className="flex items-center justify-between mb-4">
+                                <h2 className="font-mono text-xl font-semibold">Recent Sessions</h2>
+                                <Link
+                                    to="/sessions"
+                                    className="text-sm font-medium text-primary hover:text-primary/80 transition-colors"
+                                >
+                                    <span className="flex items-center gap-2">
+                                        View all <ArrowRight className="h-4 w-4"/>
+                                    </span>
+                                </Link>
+                            </div>
+                            <div className="grid gap-4 sm:grid-cols-2">
+                                {last30Days.map((session, index) => (
+                                    <RecentSessions
+                                        key={index} 
+                                        {...session} 
+                                    />
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Weekly Activity and Learning Queue */}
+                    <div>
+
+                    </div>
+
+                </div>
             </div>
        </Layout>
     );
