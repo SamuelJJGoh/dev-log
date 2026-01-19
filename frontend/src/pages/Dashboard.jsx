@@ -23,6 +23,23 @@ export default function Dashboard() {
         }
     }, [API_BASE_URL]);
 
+     const fetchAllResources = useCallback(async () => {
+        try {
+            const response = await axios.get(`${API_BASE_URL}/v1/resources`);
+            setResources(response.data);
+        } catch (error) {
+            console.error("Error fetching resources:", error);
+        } finally {
+            console.log("Fetching resources completed")
+        }
+    }, [API_BASE_URL]);
+
+     useEffect(() => {
+        fetchAllSessions();
+        fetchAllResources();
+    }, [fetchAllSessions, fetchAllResources]);
+
+
     const last30Days = useMemo(() => {
         const currentDate = new Date();
         const fromDate = new Date(
@@ -54,17 +71,6 @@ export default function Dashboard() {
         return (totalMinutes / 60).toFixed(2);
     }, [last30Days]);
 
-    const fetchAllResources = useCallback(async () => {
-        try {
-            const response = await axios.get(`${API_BASE_URL}/v1/resources`);
-            setResources(response.data);
-        } catch (error) {
-            console.error("Error fetching resources:", error);
-        } finally {
-            console.log("Fetching resources completed")
-        }
-    }, [API_BASE_URL]);
-
     const resourcesToReviewCount = useMemo(() => {
         const resourcesToReview = resources.filter((resource) => 
             resource.status === "To watch"
@@ -73,11 +79,59 @@ export default function Dashboard() {
         return resourcesToReview.length;
     }, [resources])
 
-    useEffect(() => {
-        fetchAllSessions();
-        fetchAllResources();
-    }, [fetchAllSessions, fetchAllResources]);
-    
+    const getStreakCount = useMemo(() => {
+        let streak = 0;
+
+        const sortedSessionsDescending = [...sessions].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        while (
+            sortedSessionsDescending.length > 0 &&
+            new Date(sortedSessionsDescending[0].date).getTime() > Date.now()
+        ) {
+            sortedSessionsDescending.shift();
+        }
+        
+        const msPerDay = 24 * 60 * 60 * 1000;
+        const today = new Date();
+
+        const toMidnight = (d) => new Date(d.getFullYear(), d.getMonth(), d.getDate());
+        const todayMidnight = toMidnight(today);
+
+        let previousDay = null;
+
+        for (const session of sortedSessionsDescending) {
+            const sessionDay = toMidnight(new Date(session.date));
+
+            if (!previousDay) {
+                const gapFromToday = Math.floor((todayMidnight - sessionDay) / msPerDay);
+                // had a session today
+                if (gapFromToday === 0) { 
+                    previousDay = sessionDay;
+                    streak = 1
+                // no session today so far, but today is not over, so we still maintain streaks from before today
+                } else if (gapFromToday === 1) { 
+                    previousDay = sessionDay;
+                    streak = 1
+                // no session today, streak is broken
+                } else {
+                    break
+                }
+            }
+
+            const gapBetweenDays  = Math.floor((previousDay - sessionDay) / msPerDay);
+            if (gapBetweenDays === 1) {
+                previousDay = sessionDay
+                streak += 1;
+            } else if (gapBetweenDays === 0) {
+                continue  // multiple sessions on the same day, we ignore this
+            } else {
+                break // gap > 1 so streak broken
+            }
+        }
+         
+        return streak;
+    }, [sessions])
+
     return (
        <Layout>
             <div className="mx-auto max-w-7xl px-6 py-8">
@@ -117,7 +171,7 @@ export default function Dashboard() {
                     />
                     <StatsCard 
                         label={"Current Streak"}
-                        value={null}
+                        value={getStreakCount}
                         subtitle={"Days in a row"}
                         icon={<Flame className="h-6 w-6"/>}
                         accentColor={"success"}
