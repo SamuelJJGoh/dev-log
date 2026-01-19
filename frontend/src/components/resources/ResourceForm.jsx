@@ -57,8 +57,7 @@ export const ResourceForm = ({ onClose, onCreate, initialValues, onUpdate }) => 
                     ...payload,
                     _id: initialValues._id
                 });
-            }
-            else if (onCreate) {
+            } else if (onCreate) {
                 result = await onCreate(payload);
             } else {
                 result = null;
@@ -77,9 +76,9 @@ export const ResourceForm = ({ onClose, onCreate, initialValues, onUpdate }) => 
             }
         } catch (error) {
             if (isEditing) {
-                console.error("Error editing session:", error);
+                console.error("Error editing resource:", error);
             } else {
-                console.error("Error creating session:", error);
+                console.error("Error creating resource:", error);
             }
         } finally {
             setIsSubmitting(false);
@@ -99,9 +98,9 @@ export const ResourceForm = ({ onClose, onCreate, initialValues, onUpdate }) => 
             } else { // Reset form if no initial values
                 setFormValues({
                     title: "",
-                    category: "",
+                    category: "Video",
                     topics: "",
-                    status: "Project",
+                    status: "To watch",
                     url: "",
                     notes: "",
                 });

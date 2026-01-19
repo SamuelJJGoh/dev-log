@@ -65,18 +65,18 @@ export default function Resources() {
                 }
             );
 
-            const createdResource = response.data.resource
+            const createdResource = response.data.resource;
 
             if (createdResource && typeof createdResource === "object") {
-                setResources((prevResources) => [createdResource, ...prevResources])
+                setResources((prevResources) => [createdResource, ...prevResources]);
             } else {
-                await fetchResources()
+                await fetchResources();
             }
 
             return createdResource;
 
         } catch (error) {
-            let message = "Error creating resource" 
+            let message = "Error creating resource";
             if (error.response && error.response.data && error.response.data.error) {
                 message += ` ${error.response.data.error}`;
             }
@@ -112,7 +112,7 @@ export default function Resources() {
     const handleUpdateResource = async (updatedResource) => {
         try {
             if (!updatedResource || !updatedResource._id) {
-                console.error("Invalid session data for update.")
+                console.error("Invalid resource data for update.")
                 return;
             }
 
