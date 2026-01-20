@@ -15,8 +15,11 @@ const statusStyles = {
   "Completed": "bg-status-completed/10 text-status-completed border-status-completed/30",
 };
 
-export const LearningQueue = ({ resources }) => {
+export const LearningQueue = ({ loading, resources }) => {
 
+    if (loading) {
+        return <div className="glass-card p-6">Loading resources to review... </div>
+    }
     return (
         <div className="glass-card p-6">
             <div className="flex items-center justify-between mb-6">

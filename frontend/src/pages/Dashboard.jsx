@@ -15,26 +15,32 @@ export default function Dashboard() {
 
     const [sessions, setSessions] = useState([]);
     const [resources, setResources] = useState([]);
+    const [sessionsLoading, setSessionsLoading] = useState(false);
+    const [resourcesLoading, setResourcesLoading] = useState(false);
 
     const fetchAllSessions = useCallback(async () => {
+        setSessionsLoading(true);
+
         try {
             const response = await axios.get(`${API_BASE_URL}/v1/sessions`);
             setSessions(response.data);
         } catch (error) {
             console.error("Error fetching sessions:", error);
         } finally {
-            console.log("Fetching sessions completed")
+            setSessionsLoading(false);
         }
     }, [API_BASE_URL]);
 
      const fetchAllResources = useCallback(async () => {
+        setResourcesLoading(true);
+
         try {
             const response = await axios.get(`${API_BASE_URL}/v1/resources`);
             setResources(response.data);
         } catch (error) {
             console.error("Error fetching resources:", error);
         } finally {
-            console.log("Fetching resources completed")
+            setResourcesLoading(false);
         }
     }, [API_BASE_URL]);
 
@@ -227,12 +233,16 @@ export default function Dashboard() {
                                 </Link>
                             </div>
                             <div className="grid gap-4 sm:grid-cols-2">
-                                {last30Days.map((session) => (
-                                    <RecentSessions
-                                        key={session._id} 
-                                        {...session} 
-                                    />
-                                ))}
+                                {sessionsLoading ? (
+                                    <div>Loading recent sessions... </div>
+                                ) : (
+                                    last30Days.map((session) => (
+                                        <RecentSessions
+                                            key={session._id} 
+                                            {...session} 
+                                        />
+                                    ))
+                                )}
                             </div>
                         </div>
                     </div>
@@ -240,7 +250,10 @@ export default function Dashboard() {
                     {/* Weekly Activity and Learning Queue */}
                     <div className="space-y-6">
                         <WeeklyActivity weeklyData={weeklyData} />
-                        <LearningQueue  resources={resourcesToReview} />
+                        <LearningQueue  
+                            loading={resourcesLoading} 
+                            resources={resourcesToReview} 
+                        />
                     </div>
 
                 </div>
