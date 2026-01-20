@@ -1,6 +1,8 @@
 import { Layout } from "../components/layout/layout.jsx";
 import { StatsCard } from "../components/dashboard/StatsCard.jsx";
 import { RecentSessions } from "../components/dashboard/RecentSessions.jsx";
+import { WeeklyActivity } from "../components/dashboard/WeeklyActivity.jsx";
+import { LearningQueue } from "../components/dashboard/LearningQueue.jsx";
 import { Code2, Clock, BookOpen, Flame, ArrowRight } from "lucide-react";
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { Link } from "react-router-dom";
@@ -70,18 +72,18 @@ export default function Dashboard() {
             (sum, session) => sum + (session.durationMinutes),
             0
         );
-        return (totalMinutes / 60).toFixed(2);
+        return Number((totalMinutes / 60).toFixed(2));
     }, [last30Days]);
 
-    const resourcesToReviewCount = useMemo(() => {
-        const resourcesToReview = resources.filter((resource) => 
-            resource.status === "To watch"
-        )
+    const resourcesToReview = useMemo(() => 
+        resources.filter((resource) => 
+            resource.status === "To watch" || resource.status === "In progress") 
+    , [resources])
+    
 
-        return resourcesToReview.length;
-    }, [resources])
+    const resourcesToReviewCount = resourcesToReview.length
 
-    const getStreakCount = useMemo(() => {
+    const streakCount = useMemo(() => {
         let streak = 0;
 
         const sortedSessionsDescending = [...sessions].sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -134,6 +136,33 @@ export default function Dashboard() {
         return streak;
     }, [sessions])
 
+    const weeklyData = useMemo(() => {
+        const now = new Date();
+        const startOfWeek = new Date(now);
+        startOfWeek.setHours(0, 0, 0, 0);
+        startOfWeek.setDate(now.getDate() - now.getDay()); // sets startOfWeek to Sunday
+        const endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(startOfWeek.getDate() + 7);
+
+        const totals = Array(7).fill(0); // [0, 0, 0, 0, 0, 0, 0]
+
+        sessions.forEach((session) => {
+            const d = new Date(session.date);
+            // in forEach loop we use return to skip to the next item instead of continue
+            if (d < startOfWeek || d >= endOfWeek) return; 
+
+            const dayIndex = d.getDay(); // 0-6
+            totals[dayIndex] += session.durationMinutes || 0;
+        });
+
+        return ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].map((day, i) => ({
+            day: day,
+            hours: totals[i] / 60,
+        }));
+
+    }, [sessions])
+
+
     return (
        <Layout>
             <div className="mx-auto max-w-7xl px-6 py-8">
@@ -173,7 +202,7 @@ export default function Dashboard() {
                     />
                     <StatsCard 
                         label={"Current Streak"}
-                        value={getStreakCount}
+                        value={streakCount}
                         subtitle={"Days in a row"}
                         icon={<Flame className="h-6 w-6"/>}
                         accentColor={"success"}
@@ -198,9 +227,9 @@ export default function Dashboard() {
                                 </Link>
                             </div>
                             <div className="grid gap-4 sm:grid-cols-2">
-                                {last30Days.map((session, index) => (
+                                {last30Days.map((session) => (
                                     <RecentSessions
-                                        key={index} 
+                                        key={session._id} 
                                         {...session} 
                                     />
                                 ))}
@@ -209,8 +238,9 @@ export default function Dashboard() {
                     </div>
 
                     {/* Weekly Activity and Learning Queue */}
-                    <div>
-
+                    <div className="space-y-6">
+                        <WeeklyActivity weeklyData={weeklyData} />
+                        <LearningQueue  resources={resourcesToReview} />
                     </div>
 
                 </div>
