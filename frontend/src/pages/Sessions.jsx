@@ -1,4 +1,4 @@
-import { Layout } from "../components/layout/layout.jsx";
+import { Layout } from "../components/layout/Layout.jsx";
 import { Plus, Search, Funnel, ArrowUpNarrowWide, ArrowDownWideNarrow, ChevronDown } from "lucide-react";
 import { SessionList } from "../components/sessions/SessionList.jsx";
 import { SessionForm } from "../components/sessions/SessionForm.jsx";

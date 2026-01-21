@@ -1,4 +1,4 @@
-import { Layout } from "../components/layout/layout.jsx";
+import { Layout } from "../components/layout/Layout.jsx";
 import { StatsCard } from "../components/dashboard/StatsCard.jsx";
 import { RecentSessions } from "../components/dashboard/RecentSessions.jsx";
 import { WeeklyActivity } from "../components/dashboard/WeeklyActivity.jsx";

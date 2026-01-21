@@ -1,4 +1,4 @@
-import { Layout } from "../components/layout/layout.jsx";
+import { Layout } from "../components/layout/Layout.jsx";
 import { Plus, Search, Funnel, ChevronDown } from "lucide-react";
 import { ResourceList } from "../components/resources/ResourceList.jsx";
 import { ResourceForm } from "../components/resources/ResourceForm.jsx";
